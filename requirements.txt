@@ -1,0 +1,16 @@
+<<<<<<< HEAD
+fastapi
+uvicorn
+python-multipart
+pillow
+python-dotenv
+google-genai
+=======
+fastapi
+uvicorn
+python-multipart
+pillow
+python-dotenv
+google-genai
+>>>>>>> c5c0c91a70907bbcdfe357bfc95238f53a289969
+pydantic

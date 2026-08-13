@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+<<<<<<< HEAD
+  <link rel="manifest" href="/manifest.json">
+  <title>KP ALLERSCAN - 메뉴판 알레르기 분석기</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; background-color: #f8f9fa; color: #333; }
+    h1 { text-align: center; color: #9e1b29; margin-bottom: 24px; }
+    .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+    .tab-btn { flex: 1; padding: 12px; background: #e0e0e0; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+    .tab-btn.active { background: #9e1b29; color: white; }
+    .card { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 24px; }
+    .form-group { margin-bottom: 16px; }
+    label { display: block; font-weight: bold; margin-bottom: 8px; }
+    input[type="text"], input[type="file"], textarea { width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; }
+    textarea { resize: vertical; min-height: 80px; }
+    button.submit-btn { width: 100%; padding: 12px; background-color: #9e1b29; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
+    button.submit-btn:disabled { background-color: #aaa; }
+    .result-item { border-bottom: 1px solid #eee; padding: 14px 0; }
+    .result-item:last-child { border-bottom: none; }
+    .badge { display: inline-block; background: #e8f0fe; color: #1a73e8; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; margin-right: 6px; }
+    .badge-allergy { background: #fce8e6; color: #d93025; }
+    .badge-caution { background: #fef7e0; color: #b06000; }
+    .preview-img { max-width: 100%; border-radius: 8px; margin-top: 12px; }
+    #loading { display: none; text-align: center; color: #666; font-weight: bold; margin-top: 12px; }
+    .history-card { border: 1px solid #e0e0e0; padding: 16px; border-radius: 8px; margin-bottom: 16px; background: #fafafa; }
+    .guide-text { font-size: 13px; color: #666; margin-top: 4px; line-height: 1.4; }
+    .reasoning-box { font-size: 13px; background: #f1f3f4; padding: 8px 12px; border-radius: 6px; margin-top: 6px; color: #444; }
+    .disclaimer { font-size: 12px; color: #777; text-align: center; margin-top: 30px; padding: 15px; border-top: 1px solid #ddd; line-height: 1.5; }
+=======
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KP ALLERSCAN</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      /* AC Milan Inspired: Deep Wine Crimson & Matte Charcoal */
+      --bg-color: #0c0c0e;
+      --panel-bg: #141417;
+      --panel-border: #26262c;
+      --accent-red: #9e1b29;
+      --accent-red-hover: #b82233;
+      --text-main: #f3f3f5;
+      --text-muted: #8e8e99;
+      --danger-bg: rgba(158, 27, 41, 0.12);
+      --danger-text: #ff5c6c;
+      --danger-border: rgba(158, 27, 41, 0.4);
+      --safe-bg: rgba(20, 100, 45, 0.12);
+      --safe-text: #4ade80;
+      --safe-border: rgba(20, 100, 45, 0.4);
+      --radius: 6px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Noto Sans KR', sans-serif; letter-spacing: -0.3px; }
+    body { background-color: var(--bg-color); color: var(--text-main); min-height: 100vh; padding: 30px 16px 50px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 580px; margin: 0 auto; }
+
+    /* Header */
+    .header { text-align: center; margin-bottom: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--panel-border); }
+    .header h1 { font-family: 'Montserrat', sans-serif; font-size: 26px; font-weight: 900; color: #ffffff; letter-spacing: 1.5px; }
+
+    /* Tabs */
+    .tabs { display: flex; background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius); padding: 4px; margin-bottom: 20px; }
+    .tab-btn { flex: 1; padding: 12px 0; border: none; border-radius: 4px; font-size: 13px; font-weight: 700; color: var(--text-muted); background: transparent; cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 0.5px; }
+    .tab-btn.active { color: #ffffff; background: var(--accent-red); box-shadow: 0 2px 8px rgba(158, 27, 41, 0.4); }
+
+    /* Card */
+    .card { background: var(--panel-bg); border: 1px solid var(--panel-border); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+
+    /* Form Elements */
+    .form-group { margin-bottom: 18px; }
+    label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.8px; }
+    input[type="text"] { width: 100%; padding: 13px 15px; border: 1px solid var(--panel-border); border-radius: var(--radius); font-size: 14px; background: #0c0c0e; color: #ffffff; outline: none; transition: border-color 0.2s; }
+    input[type="text"]:focus { border-color: var(--accent-red); }
+    
+    /* Camera Scan Button Wrapper */
+    .camera-scan-box { position: relative; border: 2px dashed var(--panel-border); border-radius: var(--radius); padding: 32px 20px; text-align: center; background: #0c0c0e; cursor: pointer; transition: all 0.2s; }
+    .camera-scan-box:hover { border-color: var(--accent-red); background: rgba(158, 27, 41, 0.03); }
+    .camera-scan-box input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+    .camera-icon { font-size: 28px; margin-bottom: 8px; display: block; }
+    .camera-label-text { font-size: 14px; color: var(--text-muted); font-weight: 500; }
+    .camera-label-text strong { color: #ffffff; font-weight: 700; display: block; margin-top: 4px; font-size: 15px; color: var(--accent-red); }
+
+    /* Submit Button */
+    button.submit-btn { width: 100%; padding: 15px; background-color: var(--accent-red); color: white; border: none; border-radius: var(--radius); font-size: 14px; font-weight: 900; cursor: pointer; transition: background 0.2s; text-transform: uppercase; letter-spacing: 1px; }
+    button.submit-btn:hover { background-color: var(--accent-red-hover); }
+    button.submit-btn:disabled { background-color: #26262c; color: var(--text-muted); cursor: not-allowed; }
+    
+    #loading { display: none; text-align: center; color: #ffffff; font-weight: 500; font-size: 13px; margin-top: 16px; letter-spacing: 0.5px; }
+    .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255, 255, 255, 0.2); border-radius: 50%; border-top-color: var(--accent-red); animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Results */
+    .result-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 1px solid var(--panel-border); margin-bottom: 16px; }
+    .result-header h2 { font-size: 15px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .store-type { font-size: 11px; font-weight: 700; background: #0c0c0e; color: var(--accent-red); padding: 4px 10px; border: 1px solid var(--panel-border); border-radius: 4px; }
+    
+    .preview-img { width: 100%; max-height: 240px; object-fit: cover; border: 1px solid var(--panel-border); border-radius: var(--radius); margin-bottom: 16px; }
+
+    .menu-title { font-size: 13px; font-weight: 700; margin-bottom: 12px; color: #ffffff; border-left: 3px solid var(--accent-red); padding-left: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .result-item { background: #0c0c0e; border: 1px solid var(--panel-border); border-radius: var(--radius); padding: 14px; margin-bottom: 10px; }
+    .menu-name-group { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+    .menu-name-ko { font-size: 14px; font-weight: 700; color: #ffffff; }
+    .menu-name-en { font-size: 11px; color: var(--text-muted); font-weight: 400; }
+    .ingredients-text { font-size: 12px; color: #a1a1aa; margin-bottom: 10px; line-height: 1.4; }
+    
+    .badge-group { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+    .badge { font-size: 10px; font-weight: 700; padding: 3px 7px; border-radius: 3px; letter-spacing: 0.3px; }
+    .badge-safe { background: var(--safe-bg); color: var(--safe-text); border: 1px solid var(--safe-border); }
+    .badge-allergy { background: var(--danger-bg); color: var(--danger-text); border: 1px solid var(--danger-border); }
+    .badge-confidence { background: #1f1f26; color: var(--text-muted); border: 1px solid var(--panel-border); }
+
+    .history-card { margin-bottom: 14px; }
+>>>>>>> c5c0c91a70907bbcdfe357bfc95238f53a289969
+  </style>
+</head>
+<body>
+
+<<<<<<< HEAD
+  <h1>🍽️ KP ALLERSCAN</h1>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('analyze')">📸 이미지 분석</button>
+    <button class="tab-btn" onclick="switchTab('history')">📜 식당 이력 조회</button>
+  </div>
+
+  <!-- Tab 1: 분석 섹션 -->
+  <div id="section-analyze">
+    <div class="card">
+      <form id="uploadForm">
+        <div class="form-group">
+          <label for="restaurantId">식당 ID / 사용자 ID</label>
+          <input type="text" id="restaurantId" placeholder="예: store_01" required value="test_store" onchange="loadProfile()">
+        </div>
+
+        <!-- [신규 추가] 자연어 알레르기 프로필 입력 및 예시 가이드 -->
+        <div class="form-group">
+          <label for="allergyProfile">나의 알레르기 및 식이 주의사항</label>
+          <p class="guide-text">
+            💡 <strong>입력 예시:</strong> "들깨 알레르기가 있지만 참기름, 들기름은 괜찮고 가루나 분말 형태에만 반응해요."<br>
+            자세히 적어주실수록 AI가 미세한 예외 사항까지 정확하게 분석합니다.
+          </p>
+          <textarea id="allergyProfile" placeholder="알레르기 상태와 예외 사항을 자유롭게 적어주세요..."></textarea>
+          <button type="button" onclick="saveProfile()" style="margin-top: 8px; padding: 6px 12px; background: #333; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 12px;">프로필 저장</button>
+        </div>
+
+        <div class="form-group">
+          <label for="imageFile">메뉴판 이미지</label>
+          <input type="file" id="imageFile" accept="image/*" required>
+        </div>
+        <button type="submit" class="submit-btn" id="submitBtn">AI 맞춤 분석 실행</button>
+      </form>
+      <div id="loading">🔍 AI가 프로필 조건과 메뉴판을 정밀 대조 중입니다...</div>
+    </div>
+
+    <div class="card" id="resultCard" style="display: none;">
+      <h2>맞춤 분석 결과</h2>
+      <p><strong>식당 유형:</strong> <span id="restaurantType"></span></p>
+      <img id="previewImg" class="preview-img" src="" alt="업로드 이미지">
+      <hr style="margin: 20px 0; border: none; border-top: 1px solid #eee;">
+      <h3>메뉴별 안전도 판정</h3>
+      <div id="menuList"></div>
+
+      <!-- [신규 추가] 면책 조항 배너 -->
+      <div class="disclaimer">
+        ⚠️ 본 분석 결과는 메뉴판 성분 정보를 기반으로 한 참고용입니다.<br>
+        주방의 조리 환경이나 교차 오염(같은 조리기구 사용 등)에 따라 위험이 있을 수 있으니,<br>
+        최종 주문 시 반드시 매장 직원에게 알레르기 유무를 재확인하세요.
+      </div>
+    </div>
+  </div>
+
+  <!-- Tab 2: 이력 조회 섹션 -->
+  <div id="section-history" style="display: none;">
+    <div class="card">
+      <div class="form-group">
+        <label for="searchRestaurantId">조회할 식당 ID</label>
+        <input type="text" id="searchRestaurantId" value="test_store" placeholder="식당 ID 입력">
+      </div>
+      <button class="submit-btn" onclick="fetchHistory()">이력 불러오기</button>
+    </div>
+    <div id="historyResults"></div>
+  </div>
+
+  <script>
+    // 페이지 로드 시 기존 저장된 프로필 불러오기
+    window.addEventListener('DOMContentLoaded', () => {
+      loadProfile();
+    });
+=======
+  <div class="container">
+    <div class="header">
+      <h1>KP ALLERSCAN</h1>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('analyze')">SCAN MENU</button>
+      <button class="tab-btn" onclick="switchTab('history')">LOGS</button>
+    </div>
+
+    <!-- Tab 1: 분석 섹션 -->
+    <div id="section-analyze">
+      <div class="card">
+        <form id="uploadForm">
+          <div class="form-group">
+            <label for="restaurantId">RESTAURANT ID</label>
+            <input type="text" id="restaurantId" placeholder="예: STORE_01" required value="test_store">
+          </div>
+          <div class="form-group">
+            <label>CAMERA SCAN</label>
+            <div class="camera-scan-box">
+              <span class="camera-icon">📷</span>
+              <span class="camera-label-text" id="fileNameDisplay">
+                터치하여 카메라로 메뉴판 촬영
+                <strong>[ 실시간 카메라 스캔 ]</strong>
+              </span>
+              <!-- capture="environment" 속성이 모바일 후면 카메라를 즉시 실행합니다 -->
+              <input type="file" id="imageFile" accept="image/*" capture="environment" required onchange="updateFileName(this)">
+            </div>
+          </div>
+          <button type="submit" class="submit-btn" id="submitBtn">EXECUTE SCAN & ANALYSIS</button>
+        </form>
+        <div id="loading"><span class="spinner"></span>메뉴판 성분을 정밀 분석 중입니다...</div>
+      </div>
+
+      <div class="card" id="resultCard" style="display: none;">
+        <div class="result-header">
+          <h2>DIAGNOSIS REPORT</h2>
+          <span class="store-type" id="restaurantType">UNKNOWN</span>
+        </div>
+        <img id="previewImg" class="preview-img" src="" alt="Captured Image">
+        <div class="menu-title">ANALYZED ITEMS & ALLERGENS</div>
+        <div id="menuList"></div>
+      </div>
+    </div>
+
+    <!-- Tab 2: 이력 조회 섹션 -->
+    <div id="section-history" style="display: none;">
+      <div class="card">
+        <div class="form-group">
+          <label for="searchRestaurantId">TARGET RESTAURANT ID</label>
+          <input type="text" id="searchRestaurantId" value="test_store" placeholder="Enter Restaurant ID">
+        </div>
+        <button class="submit-btn" onclick="fetchHistory()">SEARCH LOGS</button>
+      </div>
+      <div id="historyResults"></div>
+    </div>
+  </div>
+
+  <script>
+    function updateFileName(input) {
+      const display = document.getElementById('fileNameDisplay');
+      if (input.files && input.files[0]) {
+        display.innerHTML = `촬영 완료: <strong>${input.files[0].name}</strong>`;
+      } else {
+        display.innerHTML = '터치하여 카메라로 메뉴판 촬영 <strong>[ 실시간 카메라 스캔 ]</strong>';
+      }
+    }
+>>>>>>> c5c0c91a70907bbcdfe357bfc95238f53a289969
+
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      if (tabName === 'analyze') {
+        document.querySelectorAll('.tab-btn')[0].classList.add('active');
+        document.getElementById('section-analyze').style.display = 'block';
+        document.getElementById('section-history').style.display = 'none';
+      } else {
+        document.querySelectorAll('.tab-btn')[1].classList.add('active');
+        document.getElementById('section-analyze').style.display = 'none';
+        document.getElementById('section-history').style.display = 'block';
+      }
+    }
+
+<<<<<<< HEAD
+    // 프로필 불러오기 함수
+    async function loadProfile() {
+      const restaurantId = document.getElementById('restaurantId').value;
+      if (!restaurantId) return;
+      try {
+        const res = await fetch(`/api/v1/profile/${restaurantId}`);
+        const data = await res.json();
+        if (data.allergy_profile) {
+          document.getElementById('allergyProfile').value = data.allergy_profile;
+        }
+      } catch (err) {
+        console.error('프로필 로딩 실패', err);
+      }
+    }
+
+    // 프로필 저장 함수
+    async function saveProfile() {
+      const restaurantId = document.getElementById('restaurantId').value;
+      const allergyProfile = document.getElementById('allergyProfile').value;
+      if (!restaurantId) return alert('식당/사용자 ID를 입력해 주세요.');
+
+      try {
+        const res = await fetch('/api/v1/profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ restaurant_id: restaurantId, allergy_profile: allergyProfile })
+        });
+        const data = await res.json();
+        alert(data.message || '프로필이 저장되었습니다.');
+      } catch (err) {
+        alert('프로필 저장 중 오류가 발생했습니다.');
+      }
+    }
+
+    // 이미지 분석 제출
+=======
+>>>>>>> c5c0c91a70907bbcdfe357bfc95238f53a289969
+    document.getElementById('uploadForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const restaurantId = document.getElementById('restaurantId').value;
+      const fileInput = document.getElementById('imageFile');
+      if (!fileInput.files[0]) return;
+
+      const formData = new FormData();
+      formData.append('restaurant_id', restaurantId);
+      formData.append('file', fileInput.files[0]);
+
+      const submitBtn = document.getElementById('submitBtn');
+      const loading = document.getElementById('loading');
+      const resultCard = document.getElementById('resultCard');
+
+      submitBtn.disabled = true;
+      loading.style.display = 'block';
+      resultCard.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/v1/parser/menu-image', {
+          method: 'POST',
+          body: formData
+        });
+<<<<<<< HEAD
+        if (!res.ok) throw new Error('분석에 실패했습니다.');
+=======
+        if (!res.ok) throw new Error('분석 요청 처리 중 오류가 발생했습니다.');
+>>>>>>> c5c0c91a70907bbcdfe357bfc95238f53a289969
+        const data = await res.json();
+
+        document.getElementById('restaurantType').textContent = data.restaurant_type_estimated;
+        document.getElementById('previewImg').src = data.image_url;
+
+        const menuList = document.getElementById('menuList');
+        menuList.innerHTML = '';
+        data.items.forEach(item => {
+          const allergens = item.detected_allergens.length
+<<<<<<< HEAD
+            ? item.detected_allergens.map(a => `<span class="badge badge-allergy">⚠️ ${a}</span>`).join('')
+            : '<span class="badge">안전</span>';
+          
+          // 판정 근거(reasoning) 출력 (만약 데이터에 존재할 경우)
+          const reasoningHtml = item.reasoning ? `<div class="reasoning-box">📌 <strong>판정 근거:</strong> ${item.reasoning}</div>` : '';
+
+          menuList.innerHTML += `
+            <div class="result-item">
+              <div><strong>${item.menu_name_ko}</strong> (${item.menu_name_en})</div>
+              <div style="font-size: 13px; color: #666; margin: 4px 0;">원재료: ${item.raw_ingredients_text}</div>
+              <div>${allergens} <span class="badge">신뢰도: ${item.confidence_score}%</span></div>
+              ${reasoningHtml}
+=======
+            ? item.detected_allergens.map(a => `<span class="badge badge-allergy">ALERT: ${a}</span>`).join('')
+            : '<span class="badge badge-safe">CLEAR</span>';
+          menuList.innerHTML += `
+            <div class="result-item">
+              <div class="menu-name-group">
+                <span class="menu-name-ko">${item.menu_name_ko}</span>
+                <span class="menu-name-en">${item.menu_name_en}</span>
+              </div>
+              <div class="ingredients-text">원재료: ${item.raw_ingredients_text}</div>
+              <div class="badge-group">
+                ${allergens}
+                <span class="badge badge-confidence">CONFIDENCE ${item.confidence_score}%</span>
+              </div>
+>>>>>>> c5c0c91a70907bbcdfe357bfc95238f53a289969
+            </div>`;
+        });
+        resultCard.style.display = 'block';
+      } catch (err) {
+        alert(err.message);
+      } finally {
+        submitBtn.disabled = false;
+        loading.style.display = 'none';
+      }
+    });
+
+<<<<<<< HEAD
+    // 식당별 이력 조회
+    async function fetchHistory() {
+      const restId = document.getElementById('searchRestaurantId').value;
+      const container = document.getElementById('historyResults');
+      if (!restId) return alert('식당 ID를 입력해 주세요.');
+=======
+    async function fetchHistory() {
+      const restId = document.getElementById('searchRestaurantId').value;
+      const container = document.getElementById('historyResults');
+      if (!restId) return alert('업장 식별 코드를 입력하십시오.');
+>>>>>>> c5c0c91a70907bbcdfe357bfc95238f53a289969
+
+      try {
+        const res = await fetch(`/api/v1/parser/history/${restId}`);
+        const list = await res.json();
+
+        if (list.length === 0) {
+<<<<<<< HEAD
+          container.innerHTML = '<div class="card"><p>저장된 분석 이력이 없습니다.</p></div>';
+=======
+          container.innerHTML = '<div class="card"><p style="text-align:center; color:var(--text-muted); font-size:13px;">저장된 이력 데이터가 존재하지 않습니다.</p></div>';
+>>>>>>> c5c0c91a70907bbcdfe357bfc95238f53a289969
+          return;
+        }
+
+        container.innerHTML = list.map(item => `
+          <div class="card history-card">
+<<<<<<< HEAD
+            <h3>📌 기록 ID #${item.id} (식당: ${item.restaurant_id})</h3>
+            <p><strong>업종 추정:</strong> ${item.restaurant_type_estimated}</p>
+            <img src="${item.image_url}" class="preview-img" style="max-height: 200px;">
+            <h4 style="margin-top: 12px;">분석된 메뉴 (${item.items.length}개)</h4>
+            ${item.items.map(m => `
+              <div class="result-item">
+                <div><strong>${m.menu_name_ko}</strong> - ${m.detected_allergens.length ? '⚠️ 알레르기 주의/위험' : '✅ 안전'}</div>
+                ${m.reasoning ? `<div class="reasoning-box">📌 ${m.reasoning}</div>` : ''}
+=======
+            <div class="result-header">
+              <h3 style="font-size:13px; font-weight:700;">LOG #${item.id}</h3>
+              <span class="store-type">${item.restaurant_type_estimated}</span>
+            </div>
+            <img src="${item.image_url}" class="preview-img" style="max-height: 180px;">
+            <div class="menu-title">ITEMS (${item.items.length})</div>
+            ${item.items.map(m => `
+              <div class="result-item" style="padding:10px 12px; margin-bottom:6px;">
+                <div class="menu-name-group">
+                  <span class="menu-name-ko" style="font-size:13px;">${m.menu_name_ko}</span>
+                  ${m.detected_allergens.length ? '<span class="badge badge-allergy">ALERT</span>' : '<span class="badge badge-safe">CLEAR</span>'}
+                </div>
+>>>>>>> c5c0c91a70907bbcdfe357bfc95238f53a289969
+              </div>
+            `).join('')}
+          </div>
+        `).join('');
+      } catch (err) {
+<<<<<<< HEAD
+        alert('이력 로딩 실패');
+      }
+    }
+  </script>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('Service Worker registered!'))
+          .catch(err => console.log('Service Worker registration failed: ', err));
+      });
+    }
+  </script>
+</body>
+</html>
+=======
+        alert('이력 데이터 로딩에 실패했습니다.');
+      }
+    }
+  </script>
+</body>
+</html>
+>>>>>>> c5c0c91a70907bbcdfe357bfc95238f53a289969

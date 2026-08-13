@@ -1,0 +1,16 @@
+{
+  "name": "KP ALLERSCAN",
+  "short_name": "AllerScan",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0c0c0e",
+  "theme_color": "#9e1b29",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/1088312001.png",
+      "sizes": "4055x4055",
+      "type": "image/png"
+    }
+  ]
+}
