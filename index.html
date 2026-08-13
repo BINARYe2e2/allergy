@@ -47,17 +47,18 @@
     input[type="text"]:focus, textarea:focus { border-color: var(--accent-red); }
     textarea { resize: vertical; min-height: 80px; }
     
-    .guide-text { font-size: 12px; color: var(--text-muted); margin-top: 6px; line-height: 1.4; }
     .profile-save-btn { margin-top: 8px; padding: 8px 14px; background: #26262c; color: #ffffff; border: 1px solid var(--panel-border); border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 700; transition: background 0.2s; }
     .profile-save-btn:hover { background: var(--accent-red); border-color: var(--accent-red); }
 
-    /* Camera Scan Button Wrapper */
-    .camera-scan-box { position: relative; border: 2px dashed var(--panel-border); border-radius: var(--radius); padding: 32px 20px; text-align: center; background: #0c0c0e; cursor: pointer; transition: all 0.2s; }
+    /* Camera & File Scan Boxes */
+    .scan-options { display: flex; gap: 10px; }
+    .camera-scan-box { position: relative; flex: 1; border: 2px dashed var(--panel-border); border-radius: var(--radius); padding: 24px 10px; text-align: center; background: #0c0c0e; cursor: pointer; transition: all 0.2s; }
     .camera-scan-box:hover { border-color: var(--accent-red); background: rgba(158, 27, 41, 0.03); }
     .camera-scan-box input[type="file"] { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-    .camera-icon { font-size: 28px; margin-bottom: 8px; display: block; }
-    .camera-label-text { font-size: 14px; color: var(--text-muted); font-weight: 500; }
-    .camera-label-text strong { color: var(--accent-red); font-weight: 700; display: block; margin-top: 4px; font-size: 15px; }
+    .camera-icon { font-size: 24px; margin-bottom: 6px; display: block; }
+    .camera-label-text { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+    .camera-label-text strong { color: var(--accent-red); font-weight: 700; display: block; margin-top: 4px; font-size: 13px; }
+    .selected-file-info { font-size: 12px; color: var(--safe-text); margin-top: 8px; text-align: center; font-weight: 700; }
 
     /* Submit Button */
     button.submit-btn { width: 100%; padding: 15px; background-color: var(--accent-red); color: white; border: none; border-radius: var(--radius); font-size: 14px; font-weight: 900; cursor: pointer; transition: background 0.2s; text-transform: uppercase; letter-spacing: 1px; }
@@ -122,16 +123,31 @@
           </div>
 
           <div class="form-group">
-            <label>CAMERA SCAN</label>
-            <div class="camera-scan-box">
-              <span class="camera-icon">📷</span>
-              <span class="camera-label-text" id="fileNameDisplay">
-                터치하여 카메라로 메뉴판 촬영
-                <strong>[ 실시간 카메라 스캔 ]</strong>
-              </span>
-              <input type="file" id="imageFile" accept="image/*" capture="environment" required onchange="updateFileName(this)">
+            <label>MENU IMAGE INPUT (선택)</label>
+            <div class="scan-options">
+              <!-- 1. 카메라 직접 촬영 -->
+              <label class="camera-scan-box">
+                <span class="camera-icon">📷</span>
+                <span class="camera-label-text">
+                  직접 촬영
+                  <strong>[ 카메라 실행 ]</strong>
+                </span>
+                <input type="file" accept="image/*" capture="environment" onchange="handleFileSelect(this, '카메라 촬영')">
+              </label>
+
+              <!-- 2. 갤러리/파일 선택 -->
+              <label class="camera-scan-box">
+                <span class="camera-icon">🖼️</span>
+                <span class="camera-label-text">
+                  갤러리 / 파일
+                  <strong>[ 사진 불러오기 ]</strong>
+                </span>
+                <input type="file" accept="image/*" onchange="handleFileSelect(this, '갤러리 파일')">
+              </label>
             </div>
+            <div id="selectedFileInfo" class="selected-file-info"></div>
           </div>
+
           <button type="submit" class="submit-btn" id="submitBtn">EXECUTE SCAN & ANALYSIS</button>
         </form>
         <div id="loading"><span class="spinner"></span>메뉴판 성분과 맞춤 프로필을 정밀 대조 중입니다...</div>
@@ -166,16 +182,16 @@
   </div>
 
   <script>
+    let selectedFile = null;
+
     window.addEventListener('DOMContentLoaded', () => {
       loadProfile();
     });
 
-    function updateFileName(input) {
-      const display = document.getElementById('fileNameDisplay');
+    function handleFileSelect(input, sourceName) {
       if (input.files && input.files[0]) {
-        display.innerHTML = `촬영 완료: <strong>${input.files[0].name}</strong>`;
-      } else {
-        display.innerHTML = '터치하여 카메라로 메뉴판 촬영 <strong>[ 실시간 카메라 스캔 ]</strong>';
+        selectedFile = input.files[0];
+        document.getElementById('selectedFileInfo').textContent = `✅ 선택됨 (${sourceName}): ${selectedFile.name}`;
       }
     }
 
@@ -227,12 +243,14 @@
     document.getElementById('uploadForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const restaurantId = document.getElementById('restaurantId').value;
-      const fileInput = document.getElementById('imageFile');
-      if (!fileInput.files[0]) return;
+      
+      if (!selectedFile) {
+        return alert('카메라 촬영 또는 갤러리 파일 선택을 통해 메뉴판 이미지를 지정해 주세요.');
+      }
 
       const formData = new FormData();
       formData.append('restaurant_id', restaurantId);
-      formData.append('file', fileInput.files[0]);
+      formData.append('file', selectedFile);
 
       const submitBtn = document.getElementById('submitBtn');
       const loading = document.getElementById('loading');
