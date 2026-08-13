@@ -16,7 +16,6 @@ UPLOAD_DIR = "uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
-=======
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
