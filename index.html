@@ -45,7 +45,9 @@
     label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.8px; }
     input[type="text"], textarea { width: 100%; padding: 13px 15px; border: 1px solid var(--panel-border); border-radius: var(--radius); font-size: 14px; background: #0c0c0e; color: #ffffff; outline: none; transition: border-color 0.2s; }
     input[type="text"]:focus, textarea:focus { border-color: var(--accent-red); }
-    textarea { resize: vertical; min-height: 90px; }
+    
+    /* 입력창 상하 조절 방지 (고정 크기) */
+    textarea { resize: none; min-height: 90px; }
     
     .profile-save-btn { margin-top: 8px; padding: 8px 14px; background: #26262c; color: #ffffff; border: 1px solid var(--panel-border); border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 700; transition: background 0.2s; }
     .profile-save-btn:hover { background: var(--accent-red); border-color: var(--accent-red); }
