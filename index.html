@@ -113,7 +113,8 @@
         <form id="uploadForm">
           <div class="form-group">
             <label for="restaurantId">RESTAURANT ID / USER ID</label>
-            <input type="text" id="restaurantId" placeholder="예: test_store" required value="test_store" onchange="loadProfile()">
+            <!-- onfocus="this.select()" 추가됨 -->
+            <input type="text" id="restaurantId" placeholder="예: test_store" required value="test_store" onchange="loadProfile()" onfocus="this.select()">
           </div>
 
           <div class="form-group">
@@ -173,7 +174,8 @@
       <div class="card">
         <div class="form-group">
           <label for="searchRestaurantId">TARGET RESTAURANT ID</label>
-          <input type="text" id="searchRestaurantId" value="test_store" placeholder="Enter Restaurant ID">
+          <!-- onfocus="this.select()" 추가됨 -->
+          <input type="text" id="searchRestaurantId" value="test_store" placeholder="Enter Restaurant ID" onfocus="this.select()">
         </div>
         <button class="submit-btn" onclick="fetchHistory()">SEARCH LOGS</button>
       </div>
