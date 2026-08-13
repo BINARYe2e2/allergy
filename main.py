@@ -9,20 +9,12 @@ from schemas import MenuAnalysisResponse
 from pipeline import analyze_menu_image
 import database
 
+# 데이터베이스 초기화
+database.init_db()
+
 app = FastAPI(title="KP ALLERSCAN API")
 
-database.init_db()
-UPLOAD_DIR = "uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
-
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-
-app = FastAPI()
-
-# 1. CORS 설정 (에러 발생 시에도 브라우저 차단 방지)
->>>>>>> c5c0c91a70907bbcdfe357bfc95238f53a289969
+# CORS 설정
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -30,6 +22,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+UPLOAD_DIR = "uploads"
+os.makedirs(UPLOAD_DIR, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 
 class ProfileUpdate(BaseModel):
     restaurant_id: str
@@ -87,10 +83,8 @@ async def parse_menu_image(
         
         image_url = f"/uploads/{filename}"
 
-        # 사용자의 자연어 알레르기 프로필 조회
+        # 사용자의 자연어 알레르기 프로필 조회 후 파이프라인에 전달
         profile_text = database.get_user_profile(restaurant_id) or "등록된 알레르기 정보가 없습니다."
-
-        # 파이프라인 호출 시 프로필 텍스트 전달
         result = await analyze_menu_image(image_bytes, mime_type=file.content_type, profile_text=profile_text)
         
         result_dict = result.model_dump()
@@ -114,81 +108,3 @@ async def get_history(restaurant_id: str):
 @app.get("/1088312001.png")
 async def get_icon():
     return FileResponse("1088312001.png")
-=======
-# 2. 이미지 저장용 uploads 폴더 자동 생성 (필수)
-os.makedirs("uploads", exist_ok=True)
-
-
-import os
-import uuid
-from fastapi import FastAPI, UploadFile, File, Form, HTTPException, status
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
-from schemas import MenuAnalysisResponse
-from pipeline import analyze_menu_image
-import database
-
-app = FastAPI(title="Menu Allergy Parser API")
-
-database.init_db()
-UPLOAD_DIR = "uploads"
-os.makedirs(UPLOAD_DIR, exist_ok=True)
-app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-@app.get("/")
-async def read_index():
-    """웹 화면 출력"""
-    return FileResponse("index.html")
-
-@app.post("/api/v1/parser/menu-image", response_model=MenuAnalysisResponse)
-async def parse_menu_image(
-    file: UploadFile = File(...),
-    restaurant_id: str = Form(...)
-):
-    if not file.content_type.startswith("image/"):
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="이미지 파일만 업로드할 수 있습니다."
-        )
-    
-    try:
-        image_bytes = await file.read()
-        
-        file_extension = os.path.splitext(file.filename)[1] or ".jpg"
-        filename = f"{uuid.uuid4()}{file_extension}"
-        file_path = os.path.join(UPLOAD_DIR, filename)
-        
-        with open(file_path, "wb") as f:
-            f.write(image_bytes)
-        
-        image_url = f"/uploads/{filename}"
-
-        result = await analyze_menu_image(image_bytes, mime_type=file.content_type)
-        
-        result_dict = result.model_dump()
-        record_id = database.save_history(restaurant_id, image_url, result_dict)
-        
-        result.id = record_id
-        result.restaurant_id = restaurant_id
-        result.image_url = image_url
-        
-        return result
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Analysis Error: {str(e)}"
-        )
-
-@app.get("/api/v1/parser/history/{restaurant_id}")
-async def get_history(restaurant_id: str):
-    return database.get_history_by_restaurant(restaurant_id)
->>>>>>> c5c0c91a70907bbcdfe357bfc95238f53a289969
