@@ -1,5 +1,5 @@
 import os
-<<<<<<< HEAD
+
 import uuid
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
@@ -33,7 +33,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-<<<<<<< HEAD
 class ProfileUpdate(BaseModel):
     restaurant_id: str
     allergy_profile: str
